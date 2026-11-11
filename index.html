@@ -6,60 +6,149 @@
 <title>KWA Water Quality Lab Entry</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#f3f7fa;--card:#fff;--ink:#12303f;--mut:#5b7482;--line:#cfdce4;--acc:#0a6fa8;--acc2:#0b8a7a;--bad:#b4491f;--inp:#f7fafc}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1419;--card:#122028;--ink:#e3f0f5;--mut:#8fa9b5;--line:#25404c;--acc:#3fb4ea;--acc2:#2fd0b8;--bad:#ff9a6b;--inp:#0d1a20}}
-:root[data-theme="dark"]{--bg:#0b1419;--card:#122028;--ink:#e3f0f5;--mut:#8fa9b5;--line:#25404c;--acc:#3fb4ea;--acc2:#2fd0b8;--bad:#ff9a6b;--inp:#0d1a20}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;background:var(--card);border-bottom:3px solid var(--acc)}
-#logoBox{width:60px;height:60px;border-radius:10px;border:1px dashed var(--line);display:grid;place-items:center;cursor:pointer;overflow:hidden;flex:none}
-#logoBox img{max-width:100%;max-height:100%}
-header h1{font-size:18px;margin:0}header small{color:var(--mut)}
-.sp{flex:1}
-main{padding:12px 16px;max-width:1500px;margin:auto}
-nav{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-button,.btn{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 12px;border-radius:8px;cursor:pointer}
-button.on,button.pri{background:var(--acc);color:#fff;border-color:var(--acc)}
-button.dng{color:var(--bad)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.grid2{display:grid;grid-template-columns:minmax(260px,380px) 1fr;gap:12px}
-@media(max-width:850px){.grid2{grid-template-columns:1fr}}
-.scroll{overflow-x:auto;max-width:100%}
-table{border-collapse:collapse;width:100%}
-th,td{border:1px solid var(--line);padding:2px 4px;text-align:center;white-space:nowrap}
-th{background:var(--inp);font-size:12px;position:sticky;top:0}
-td input{width:62px;border:0;background:transparent;color:var(--ink);text-align:center;font:inherit;padding:6px 2px}
-td input.w{width:92px}td input:focus{outline:2px solid var(--acc);background:var(--inp)}
-td.s input{width:70px;font-weight:600}
-.bdl{color:var(--bad)}
-#photoView{height:340px;overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--inp);display:grid;place-items:center}
-#photoView img{transition:transform .2s;max-width:none;transform-origin:center}
-label.f{display:flex;flex-direction:column;font-size:12px;color:var(--mut);gap:2px}
-label.f input{padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--inp);color:var(--ink);width:110px}
-td input.u{background:#ffe38a;color:#000}
-#scan{font-size:13px;margin-top:8px}
-.hide{display:none!important}
-#report{display:none}
-@media print{
- @page{size:A4 landscape;margin:10mm}
- body>*:not(#report){display:none!important}
- #report{display:block!important;color:#000;background:#fff}
- #report table th,#report table td{border:1px solid #888;color:#000;font-size:9px;padding:3px}
- #report th{background:#eee;position:static}
- .bdl{color:#000!important}
-}
-#report{padding:10px}
-.rh{display:flex;align-items:center;gap:12px;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:8px}
-.rh img{height:60px}
-.sig{display:flex;justify-content:space-between;margin-top:40px;font-size:12px}
+  /* Base Variables & Theme */
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --bg: #f3f7fa;
+    --card: #fff;
+    --ink: #12303f;
+    --mut: #5b7482;
+    --line: #cfdce4;
+    --acc: #0a6fa8;
+    --bad: #b4491f;
+    --inp: #f7fafc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0b1419; --card: #122028; --ink: #e3f0f5;
+      --mut: #8fa9b5; --line: #25404c; --acc: #3fb4ea;
+      --bad: #ff9a6b; --inp: #0d1a20;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b1419; --card: #122028; --ink: #e3f0f5;
+    --mut: #8fa9b5; --line: #25404c; --acc: #3fb4ea;
+    --bad: #ff9a6b; --inp: #0d1a20;
+  }
+
+  /* Global Setup */
+  * { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body { 
+    margin: 0; 
+    background: var(--bg); 
+    color: var(--ink); 
+    font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; 
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 15px;
+    background: var(--card);
+    border-bottom: 3px solid var(--acc);
+  }
+  #logoBox {
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  #logoBox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  header h1 { font-size: 1.25rem; margin: 0; line-height: 1.2; }
+  header small { color: var(--mut); display: block; margin-top: 2px; }
+  .sp { flex: 1; min-width: 20px; }
+
+  /* Main Layout */
+  main { padding: 16px; max-width: 1500px; margin: auto; }
+  .grid2 { display: grid; grid-template-columns: minmax(260px, 350px) 1fr; gap: 16px; }
+  .card { 
+    background: var(--card); 
+    border: 1px solid var(--line); 
+    border-radius: 12px; 
+    padding: 16px; 
+    margin-bottom: 16px; 
+  }
+  
+  /* Buttons & Nav */
+  nav { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  button, .btn {
+    font: inherit; font-weight: 500;
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    padding: 8px 14px; border-radius: 8px; cursor: pointer;
+    transition: all 0.2s; white-space: nowrap;
+  }
+  button:active, .btn:active { transform: scale(0.98); }
+  button.on, button.pri { background: var(--acc); color: #fff; border-color: var(--acc); }
+  button.dng { color: var(--bad); }
+  
+  /* Utilities */
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .hide { display: none !important; }
+  label.f { display: flex; flex-direction: column; font-size: 12px; color: var(--mut); gap: 4px; }
+  label.f input { padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--inp); color: var(--ink); width: 120px; font-family: inherit;}
+
+  /* Tables & Scrolling */
+  .scroll { 
+    overflow-x: auto; 
+    max-width: 100%; 
+    -webkit-overflow-scrolling: touch; 
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  table { border-collapse: collapse; width: 100%; min-width: 600px; }
+  th, td { border: 1px solid var(--line); padding: 4px; text-align: center; white-space: nowrap; }
+  th { background: var(--inp); font-size: 13px; font-weight: 600; padding: 10px 6px; position: sticky; top: 0; }
+  td input { 
+    width: 62px; border: 0; background: transparent; color: var(--ink); 
+    text-align: center; font: inherit; padding: 8px 2px;
+  }
+  td input.w { width: 92px; }
+  td input:focus { outline: 2px solid var(--acc); background: var(--inp); border-radius: 4px; }
+  td.s input { width: 70px; font-weight: 600; }
+  td input.u { background: #ffe38a; color: #000; }
+  .bdl { color: var(--bad); }
+
+  /* Photo View */
+  #photoView {
+    height: 300px; overflow: auto; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--inp); display: grid; place-items: center; margin-top: 10px;
+  }
+  #photoView img { transition: transform .2s; max-width: none; transform-origin: center; }
+  #scan { font-size: 13px; margin-top: 10px; padding: 10px; background: var(--inp); border-radius: 6px; }
+
+  /* Mobile Adjustments */
+  @media(max-width: 850px) {
+    .grid2 { grid-template-columns: 1fr; }
+    header { padding: 12px; }
+    .sp { display: none; } /* Drop spacer on very small screens to let items wrap */
+    nav button { flex: 1; text-align: center; } /* Stretch nav buttons on mobile */
+  }
+
+  /* Printing */
+  #report { display: none; padding: 10px; }
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body > *:not(#report) { display: none !important; }
+    #report { display: block !important; color: #000; background: #fff; }
+    #report table th, #report table td { border: 1px solid #888; color: #000; font-size: 10px; padding: 4px; }
+    #report th { background: #eee; position: static; }
+    .bdl { color: #000 !important; }
+  }
+  .rh { display: flex; align-items: center; gap: 15px; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 10px; }
+  .rh img { height: 65px; object-fit: contain; }
+  .sig { display: flex; justify-content: space-between; margin-top: 50px; font-size: 12px; font-weight: bold; }
 </style>
 </head>
 <body>
 <header>
- <label id="logoBox" title="Tap to upload the official KWA logo"><span id="logoPh" style="font-weight:700;color:var(--acc);font-size:13px;text-align:center">KWA<br>logo</span><img id="logoImg" class="hide" alt="KWA logo"><input type="file" id="logoIn" accept="image/*" class="hide"></label>
+ <div id="logoBox"><img src="download (1).png" alt="KWA logo"></div>
  <div><h1>Kerala Water Authority</h1><small>Water Quality Lab · Result Entry &amp; Report</small></div>
  <div class="sp"></div>
  <label class="f">Test date<input type="date" id="date"></label>
@@ -75,40 +164,51 @@ td input.u{background:#ffe38a;color:#000}
 <section id="t-entry">
  <div class="grid2">
   <div class="card">
-   <b>Notebook capture</b>
-   <div class="row" style="margin:8px 0">
+   <div style="font-weight:600; font-size:15px;">Notebook capture</div>
+   <div class="row" style="margin:12px 0">
     <label class="btn pri">📷 Capture<input type="file" id="cam" accept="image/*" capture="environment" class="hide"></label>
     <label class="btn">Upload<input type="file" id="up" accept="image/*" multiple class="hide"></label>
     <button id="rl">⟲</button><button id="rr">⟳</button>
     <input type="range" id="zoom" min="0.5" max="3" step="0.1" value="1" style="flex:1;min-width:80px">
    </div>
-   <div id="photoView"><span style="color:var(--mut);padding:10px;text-align:center">Capture or upload the written page (select both pages together if separate photos). The values are read automatically into the table.</span></div>
+   <div id="photoView"><span style="color:var(--mut);padding:15px;text-align:center;line-height:1.5;">Capture or upload the written page.<br>Values are read automatically into the table.</span></div>
    <div id="scan" class="hide"></div>
   </div>
+  
   <div class="card">
-   <div class="row" style="margin-bottom:8px">
-    <b>Written entries</b><div class="sp"></div>
-    <button id="add" class="pri">+ Row</button>
-    <button id="demo">Load 03.11.2026 entries</button>
+   <div class="row" style="margin-bottom:12px">
+    <div style="font-weight:600; font-size:15px;">Written entries</div>
+    <div class="sp"></div>
+    <button id="add" class="pri">+ Add Row</button>
+    <button id="demo">Load Demo</button>
     <button id="clr" class="dng">Clear</button>
    </div>
    <div class="scroll"><table id="ent"></table></div>
-   <small style="color:var(--mut)">Type values as in the notebook. “-” or blank = not tested, “nil” = 0. Titre columns are raw burette readings. Enter moves down.</small>
+   <div style="color:var(--mut); font-size:12px; margin-top:8px; line-height:1.5;">
+     Type values as in the notebook. “-” or blank = not tested, “nil” = 0. Titre columns are raw burette readings. Pressing 'Enter' moves down.
+   </div>
   </div>
  </div>
 </section>
 
 <section id="t-results" class="hide">
  <div class="card">
-  <div class="row" style="margin-bottom:8px"><b>Final results</b><div class="sp"></div>
-   <button id="xl" class="pri">⬇ Excel (with formulas)</button><button id="pr">🖨 Print</button></div>
+  <div class="row" style="margin-bottom:12px">
+   <div style="font-weight:600; font-size:15px;">Final results</div>
+   <div class="sp"></div>
+   <button id="xl" class="pri">⬇ Excel Export</button>
+   <button id="pr">🖨 Print Report</button>
+  </div>
   <div class="scroll"><table id="res"></table></div>
  </div>
 </section>
 
 <section id="t-factors" class="hide">
- <div class="card"><b>Reagent factors</b> <small style="color:var(--mut)">(result = titre × factor; update when a new reagent batch is standardised)</small>
-  <div class="row" id="fac" style="margin-top:10px"></div></div>
+ <div class="card">
+  <div style="font-weight:600; font-size:15px;">Reagent factors</div> 
+  <div style="color:var(--mut); font-size:13px; margin-bottom: 12px;">(result = titre × factor; update when a new reagent batch is standardised)</div>
+  <div class="row" id="fac"></div>
+ </div>
 </section>
 </main>
 
@@ -123,16 +223,9 @@ const DEMO=[
 ['2453',6.99,87.29,49.36,0.41,'-',0.6,1.1,'-',1.5,13.9,0.07,5,'nil','-','-','Nil','Nil'],
 ['2454',7.18,86.99,46.10,2.93,'-','-',1.5,'-',2.0,'-',0.11,5,'nil','-','-','-','-'],
 ['2456',4.89,354.9,199.9,12.87,6.8,'nil',2.5,'-',5.3,89.8,0.65,5,0.11,60,'Disagreeable','-','-'],
-['2458',7.01,79.60,44.99,0.49,'-','-',1,'-',1.5,'-',0.07,5,'-','-','-','-','-'],
-['2459',6.56,248.5,140.1,0.79,'-','-',1.5,'-',5.5,'-',0.08,10,'-','-','-','-','-'],
-['2460',5.10,131.6,75.98,0.45,7.7,'nil',1.5,'-',2.7,1.89,0.09,20,0.12,1,'Agreeable','-','-'],
-['2461',7.86,255.6,144.4,1.37,'-',1,3.8,'-',4.6,5.89,0.13,10,0.19,'-','-','Nil','Nil'],
-['2462',7.97,206.2,116.2,4.12,2.5,2.5,3.5,2.6,2.4,3.98,0.68,5,0.21,40,'Disagreeable','-','-'],
-['2463',8.24,208.0,117.7,1.60,0.8,2.6,3.8,2.5,2.5,4.26,0.09,5,0.19,1,'Agreeable','-','-'],
-['2492',5.74,183.3,103.1,0.13,2.2,'nil',2.0,0.8,3.5,1.26,0.07,20,0.27,1,'Agreeable','-','-'],
-['2493',7.42,332.2,188.6,1.02,'-','-',3.9,'-',5.0,'-',0.18,10,'-','-','-','-','-']];
+['2460',5.10,131.6,75.98,0.45,7.7,'nil',1.5,'-',2.7,1.89,0.09,20,0.12,1,'Agreeable','-','-']];
 const $=s=>document.querySelector(s);
-const st={rows:[],fac:{},date:'',logo:''};
+const st={rows:[],fac:{},date:''};
 const ld=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
 const sv=()=>{try{localStorage.setItem('kwa',JSON.stringify(st))}catch(e){}};
 Object.assign(st,ld('kwa',{}));
@@ -157,17 +250,17 @@ const RES=[['s','Sample'],['ph','pH'],['tu','Turbidity (NTU)'],['ec','EC (µmhos
 function drawEntry(){
  const t=$('#ent');
  t.innerHTML='<tr><th>#</th>'+COLS.map(c=>`<th>${c[1]}</th>`).join('')+'<th></th></tr>'+
- st.rows.map((r,i)=>`<tr><td>${i+1}</td>`+COLS.map(c=>`<td class="${c[2]=='s'?'s':''}"><input class="${c[2]=='w'?'w':''}${(r._u||[]).includes(c[0])?' u':''}" data-i="${i}" data-k="${c[0]}" value="${String(r[c[0]]).replace(/"/g,'&quot;')}" ${c[0]=='od'?'list="odl"':''}></td>`).join('')+`<td><button data-d="${i}" class="dng">✕</button></td></tr>`).join('')+
+ st.rows.map((r,i)=>`<tr><td>${i+1}</td>`+COLS.map(c=>`<td class="${c[2]=='s'?'s':''}"><input class="${c[2]=='w'?'w':''}${(r._u||[]).includes(c[0])?' u':''}" data-i="${i}" data-k="${c[0]}" value="${String(r[c[0]]).replace(/"/g,'&quot;')}" ${c[0]=='od'?'list="odl"':''}></td>`).join('')+`<td><button data-d="${i}" class="dng" style="padding:4px 8px;">✕</button></td></tr>`).join('')+
  '<datalist id="odl"><option>Agreeable</option><option>Disagreeable</option><option>Muddy odour</option></datalist>';
 }
 function drawRes(){
  const rows=st.rows.map(calc);
  $('#res').innerHTML='<tr>'+RES.map(c=>`<th>${c[1]}</th>`).join('')+'</tr>'+rows.map(r=>'<tr>'+RES.map(c=>`<td class="${/DL/.test(r[c[0]])?'bdl':''}">${r[c[0]]}</td>`).join('')+'</tr>').join('');
  const dt=st.date.split('-').reverse().join('.');
- $('#report').innerHTML=`<div class="rh">${st.logo?`<img src="${st.logo}" alt="">`:''}<div><h2 style="margin:0">Kerala Water Authority</h2><div>Water Quality Lab · Test Report</div><div>Date of test: ${dt}</div></div></div><table><tr>${RES.map(c=>`<th>${c[1]}</th>`).join('')}</tr>${rows.map(r=>'<tr>'+RES.map(c=>`<td>${r[c[0]]}</td>`).join('')+'</tr>').join('')}</table><div style="font-size:10px;margin-top:6px">BDL = below detection limit · UDL = upper detection limit</div><div class="sig"><span>Analyst</span><span>Assistant Executive Engineer / Chemist</span></div>`;
+ $('#report').innerHTML=`<div class="rh"><img src="download (1).png" alt=""><div><h2 style="margin:0">Kerala Water Authority</h2><div>Water Quality Lab · Test Report</div><div>Date of test: ${dt}</div></div></div><table><tr>${RES.map(c=>`<th>${c[1]}</th>`).join('')}</tr>${rows.map(r=>'<tr>'+RES.map(c=>`<td>${r[c[0]]}</td>`).join('')+'</tr>').join('')}</table><div style="font-size:10px;margin-top:6px">BDL = below detection limit · UDL = upper detection limit</div><div class="sig"><span>Analyst</span><span>Assistant Executive Engineer / Chemist</span></div>`;
 }
 function drawFac(){
- $('#fac').innerHTML=FAC.map(f=>`<label class="f">${f[1]}<input type="number" step="any" data-f="${f[0]}" value="${st.fac[f[0]]}"></label>`).join('')+'<button id="rf" style="align-self:end">Reset defaults</button>';
+ $('#fac').innerHTML=FAC.map(f=>`<label class="f">${f[1]}<input type="number" step="any" data-f="${f[0]}" value="${st.fac[f[0]]}"></label>`).join('')+'<button id="rf" style="align-self:flex-end; margin-bottom:2px;">Reset defaults</button>';
 }
 function all(){drawEntry();drawRes();drawFac();sv()}
 document.addEventListener('input',e=>{const t=e.target;
@@ -186,8 +279,7 @@ $('#demo').onclick=()=>{st.rows=DEMO.map(mk);st.date='2026-11-03';$('#date').val
 $('#clr').onclick=()=>{if(confirm('Clear all entries?')){st.rows=[];all()}};
 $('#pr').onclick=()=>{drawRes();window.print()};
 $('#theme').onclick=()=>{const r=document.documentElement;const d=getComputedStyle(r).getPropertyValue('--bg').trim()=='#0b1419';r.dataset.theme=d?'light':'dark'};
-$('#logoIn').onchange=e=>{const f=e.target.files[0];if(!f)return;const R=new FileReader();R.onload=()=>{st.logo=R.result;showLogo();sv();drawRes()};R.readAsDataURL(f)};
-function showLogo(){if(st.logo){$('#logoImg').src=st.logo;$('#logoImg').classList.remove('hide');$('#logoPh').classList.add('hide')}}
+
 let rot=0;
 async function toBlob(f){const u=URL.createObjectURL(f);const im=new Image();await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src=u});const s=Math.min(1,1800/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);return new Promise(r=>c.toBlob(r,'image/jpeg',0.9))}
 const PROMPT=`These are photos of a handwritten water-quality lab notebook (Kerala Water Authority). Pages may be rotated sideways. A spread has a LEFT page and a RIGHT page, and each sample row continues across both; photos may show the left page, the right page, or both. Read the header written on each page.
@@ -198,8 +290,9 @@ Output ONLY JSON: {"date":null,"rows":[{"s":"","ph":"","ec":"","tds":"","tu":"",
 const setScan=(h)=>{const s=$('#scan');s.classList.remove('hide');s.innerHTML=h};
 async function photo(e){const fs=[...e.target.files];e.target.value='';if(!fs.length)return;rot=0;
  $('#photoView').innerHTML=`<img id="pimg" src="${URL.createObjectURL(fs[0])}" style="width:100%" alt="Notebook page">`;$('#zoom').value=1;
- let smp=null;try{smp=await claude.use('sample')}catch(x){}
- if(!smp){setScan('Auto-read is not available in this view. Type the values from the photo.');return}
+ let smp=null;
+ try{if(typeof claude !== 'undefined') smp = await claude.use('sample')}catch(x){}
+ if(!smp){setScan('Auto-read requires the original AI environment. Please type the values manually.');return}
  let lim=null;try{lim=await smp.limits()}catch(x){}
  if(!lim||!lim.images){setScan('Auto-read of photos is not available here. Type the values from the photo.');return}
  setScan('⏳ Reading the notebook page… this takes about 30–60 seconds.');
@@ -212,7 +305,7 @@ async function photo(e){const fs=[...e.target.files];e.target.value='';if(!fs.le
    const ex=st.rows.find(r=>r.s===nr.s);if(ex){COLS.forEach(c=>{if(nr[c[0]]!=='')ex[c[0]]=nr[c[0]]});ex._u=nr._u}else st.rows.push(nr);n++});
   if(d&&/^\d{4}-\d\d-\d\d$/.test(d.date||'')){st.date=d.date;$('#date').value=d.date}
   all();
-  setScan(`✅ Read ${n} sample row${n==1?'':'s'} into the table. Yellow cells are uncertain: check them against the photo.<div class="row" style="margin-top:6px"><button class="pri" id="go">View results</button><button id="gx">⬇ Excel</button></div>`);
+  setScan(`✅ Read ${n} sample row${n==1?'':'s'} into the table. Yellow cells are uncertain: check them against the photo.<div class="row" style="margin-top:6px"><button class="btn pri" id="go">View results</button><button class="btn" id="gx">⬇ Excel</button></div>`);
   $('#go').onclick=()=>document.querySelector('nav button[data-t=results]').click();
   $('#gx').onclick=()=>$('#xl').click();
  }catch(err){
@@ -249,9 +342,17 @@ $('#xl').onclick=async()=>{
  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'DATA');
  const out=XLSX.write(wb,{type:'array',bookType:'xlsx'});
  const blob=new Blob([out],{type:'application/octet-stream'});
- try{const d=await claude.use('downloads');if(d)await d.save({filename:`KWA_Water_Results_${st.date}.xlsx`,data:blob});else alert('Download is not available in this view.')}catch(e){}
+ 
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url;
+ a.download = `KWA_Water_Results_${st.date}.xlsx`;
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ URL.revokeObjectURL(url);
 };
-$('#date').value=st.date;showLogo();all();
+$('#date').value=st.date;all();
 </script>
 </body>
 </html>
