@@ -204,7 +204,7 @@ async function photo(e){
  rot=0;
  $('#photoView').innerHTML=`<img id="pimg" src="${URL.createObjectURL(fs[0])}" style="width:100%" alt="Notebook page">`;
  $('#zoom').value=1;
- if(!API_BASE || API_BASE.includes('PASTE_YOUR')){
+ if(!API_BASE || API_BASE.includes('apikey_01KxCsAcUNSZFUdT8SmSsaSt')){
    setScan('⚠ Scanner backend is not configured. Deploy the backend to Render, then paste its URL into API_BASE near the top of this script.');
    return;
  }
